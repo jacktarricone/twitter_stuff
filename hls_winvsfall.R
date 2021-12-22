@@ -1,7 +1,4 @@
 library(terra)
-library(EBImage)
-install.packages("imagerExtra")
-library(imagerExtra)
 
 # tutorial for creating harmonized Landsat/Sen-2 (HLS) figures for twitter
 # jack tarricone
@@ -43,26 +40,60 @@ fall_rgb <-c(hls_fall[[4]], hls_fall[[3]], hls_fall[[2]])
 plotRGB(fall_rgb, stretch = "lin")
 plotRGB(winter_rgb, stretch = "hist", bgalpha = 0, add = TRUE)
 
-layout(matrix(1:2, 1, 2))
-plotRGB(winter_rgb, stretch = "lin")
+##### stretch rbg values and convert to 1-255
+## not sure i need this but good practice
 
-min <-as.numeric(global(winter_rgb[[1]], fun= "min", na.rm = TRUE))
-max <-as.numeric(global(winter_rgb[[1]], fun= "max", na.rm = TRUE))
-winter_rgb[[1]] <-(winter_rgb[[1]]+abs(min))/(max+abs(min))
-plot(winter_rgb[[1]])
+####################
+##### red band #####
+####################
 
+# find max and max reflectance
+r_min <-as.numeric(global(winter_rgb[[1]], fun= "min", na.rm = TRUE))
+r_max <-as.numeric(global(winter_rgb[[1]], fun= "max", na.rm = TRUE))
+
+# convert to 0-255
+winter_rgb[[1]] <-((winter_rgb[[1]]+abs(r_min))/(r_max+abs(r_min))*255)
+plot(winter_rgb[[1]], col = gray(0:100 / 100)) # test plot
+
+######################
+##### green band #####
+######################
+
+# find max and max reflectance
+g_min <-as.numeric(global(winter_rgb[[2]], fun= "min", na.rm = TRUE))
+g_max <-as.numeric(global(winter_rgb[[2]], fun= "max", na.rm = TRUE))
+
+# convert to 0-255
+winter_rgb[[2]] <-((winter_rgb[[2]]+abs(g_min))/(g_max+abs(g_min))*255)
+plot(winter_rgb[[2]], col = gray(0:100 / 100)) # test plot
+
+######################
+##### blue band ######
+######################
+
+# find max and max reflectance
+b_min <-as.numeric(global(winter_rgb[[3]], fun= "min", na.rm = TRUE))
+b_max <-as.numeric(global(winter_rgb[[3]], fun= "max", na.rm = TRUE))
+
+# convert to 0-255
+winter_rgb[[3]] <-((winter_rgb[[3]]+abs(b_min))/(b_max+abs(b_min))*255)
+plot(winter_rgb[[3]], col = gray(0:100 / 100)) # test plot
+
+##### test plot with converted values
+plotRGB(winter_rgb, stretch = "hist") # no difference 
 
 # save rasters
 writeRaster(winter_rgb, "winter_rgb.tif")
 writeRaster(fall_rgb, "fall_rgb.tif")
 
-png("tahoe_fall.png", width = 3, height = 3, units = 'in', res = 2000)
-plotRGB(fall_rgb, stretch = "lin")
+### save image at the same resolution as the raster
+# https://stackoverflow.com/questions/50953192/r-how-is-it-possible-to-export-from-r-an-image-from-a-raster-layer-while-mainta
+
+png("tahoe_caldor_test.png", height=nrow(fall_rgb), width=ncol(winter_rgb), res = 50) # same dim as raster
+plotRGB(fall_rgb, stretch = "lin", maxcell=ncell(fall_rgb)) # maxcell key
 dev.off()
-
-png("tahoe_winter.png", width = 4, height = 4, units = 'in', res = 1200)
-plotRGB(fall_rgb, stretch = "lin")
-plotRGB(winter_rgb, stretch = "hist", bgalpha = 0, add = TRUE)
+  
+png("tahoe_winter.png", height=nrow(winter_rgb), width=ncol(winter_rgb))
+plotRGB(fall_rgb, stretch = "lin", maxcell=ncell(winter_rgb)) # plot this first to fill NaN cells over lake
+plotRGB(winter_rgb, stretch = "hist", maxcell=ncell(winter_rgb), bgalpha = 0, add = TRUE)
 dev.off()
-
-
