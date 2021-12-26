@@ -21,7 +21,7 @@ hls_fall_raw <-rast(dl_fall)  # create "SpatRaster" for fall image
 hls_fall_raw
 
 # set crop extent
-box <-c(710000,802000,4290240,4400040)
+box <-c(720000,795000,4290240,4400040)
 box_ext <-ext(box)
 
 # crop images down slightly for better visualization
@@ -89,11 +89,11 @@ writeRaster(fall_rgb, "fall_rgb.tif")
 ### save image at the same resolution as the raster
 # https://stackoverflow.com/questions/50953192/r-how-is-it-possible-to-export-from-r-an-image-from-a-raster-layer-while-mainta
 
-png("tahoe_caldor_test.png", height=nrow(fall_rgb), width=ncol(winter_rgb), res = 50) # same dim as raster
+png("tahoe_caldorv2.png", height=nrow(fall_rgb), width=ncol(winter_rgb)) # same dim as raster
 plotRGB(fall_rgb, stretch = "lin", maxcell=ncell(fall_rgb)) # maxcell key
 dev.off()
   
-png("tahoe_winter.png", height=nrow(winter_rgb), width=ncol(winter_rgb))
+png("tahoe_winterv2.png", height=nrow(winter_rgb), width=ncol(winter_rgb))
 plotRGB(fall_rgb, stretch = "lin", maxcell=ncell(winter_rgb)) # plot this first to fill NaN cells over lake
 plotRGB(winter_rgb, stretch = "hist", maxcell=ncell(winter_rgb), bgalpha = 0, add = TRUE)
 dev.off()
