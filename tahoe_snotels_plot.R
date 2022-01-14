@@ -10,6 +10,7 @@ library(ggplot2)
 library(lubridate)
 library(RColorBrewer)
 
+{
 # read in station meta data from Truckee, Carson, Lower Sac (32 stations)
 tahoe_meta <-read.csv("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/tahoe_station_meta.csv")
 tahoe_meta <-tahoe_meta[-c(2,18)]
@@ -22,6 +23,9 @@ tahoe_meta$end_date <-mdy(tahoe_meta$end_date)
 truckee_normals <-read.csv("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/truckee_91-20_normals.csv")
 truckee_normals$Date <-as.Date(truckee_normals$Date)
 plot(truckee_normals$dowy, truckee_normals$min_mm) # test
+
+# define date
+todays_date <-as.character(Sys.Date())
 
 # filter normals to today
 normals_today <-filter(truckee_normals, Date <= Sys.Date())
@@ -66,7 +70,7 @@ head(wy2021_df)
 theme_set(theme_light(base_size = 11)) 
 plot <-ggplot(wy2021_df)+
   geom_line(aes(date, swe_in, group = site_name, color = "2021-22 SNOTEL Stations"), alpha = .7,  size = .3)+ # plot by site
-  labs(title = "12/27/2021 Lake Tahoe SNOTEL 32 Station Composite", 
+  labs(title =  paste0(todays_date," Lake Tahoe SNOTEL 32 Station Composite"), 
        y = "SWE (in)", x = "Date", color = "Station Elevation (m)") +
   geom_line(normals_today, mapping = aes(y = min_in, x = Date, color = "'91-'20 Minimum"), size = .9) +
   geom_line(normals_today, mapping = aes(y = max_in, x = Date, color = "'91-'20 Maximum"), size = .9) +
@@ -90,19 +94,19 @@ plot <-ggplot(wy2021_df)+
 # test plot
 plot(plot)
 
-setwd("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/")
-ggsave(plot,
-       file = "tahoe_swe_12-27_normals_inv3.png",
-       width = 7, 
-       height = 5,
-       dpi = 400)
+# setwd("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/")
+# ggsave(plot,
+#        file = "tahoe_swe_12-27_normals_inv3.png",
+#        width = 7, 
+#        height = 5,
+#        dpi = 400)
 
 
 # create plot with grey transparent stations, and max/min/med info to full year
 
 fy_plot <-ggplot(wy2021_df)+
   geom_line(aes(date, swe_in, group = site_name, color = "2021-22 SNOTEL Stations"), alpha = .7,  size = .3)+ # plot by site
-  labs(title = "12/27/2021 Lake Tahoe SNOTEL 32 Station Composite Full Water Year", 
+  labs(title = paste0(todays_date," Lake Tahoe SNOTEL 32 Station Composite Full Water Year"), 
        y = "SWE (in)", x = "Date", color = "Station Elevation (m)") +
   geom_line(truckee_normals, mapping = aes(y = min_in, x = Date, color = "'91-'20 Minimum"), size = .9) +
   geom_line(truckee_normals, mapping = aes(y = max_in, x = Date, color = "'91-'20 Maximum"), size = .9) +
@@ -126,12 +130,12 @@ fy_plot <-ggplot(wy2021_df)+
 # test plot
 plot(fy_plot)
 
-setwd("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/")
-ggsave(fy_plot,
-       file = "tahoe_swe_12-27_normals_wy_inv3.png",
-       width = 7, 
-       height = 5,
-       dpi = 400)
+# setwd("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/")
+# ggsave(fy_plot,
+#        file = "tahoe_swe_12-27_normals_wy_inv3.png",
+#        width = 7, 
+#        height = 5,
+#        dpi = 400)
 
 
 
@@ -141,8 +145,8 @@ ggsave(fy_plot,
 
 ele_plot <-ggplot(wy2021_df)+
   geom_line(aes(date, swe_in, group = site_name, color = elev), alpha = .7)+ # plot by site
-  scale_colour_gradientn(colors = terrain.colors(10))+
-  labs(title = "12/27/2021 Lake Tahoe SNOTEL 32 Station Composite", 
+  scale_colour_gradientn(colors = terrain.colors(15))+
+  labs(title = paste0(todays_date," Lake Tahoe SNOTEL 32 Station Composite by Elevation"), 
        y = "SWE (in)", x = "Date", color = "Station Elevation (m)") +
   theme(axis.line = element_line(colour = "black"),
         panel.grid.major = element_blank(),
@@ -164,16 +168,17 @@ ele_plot2 <-ele_plot +
 
 print(ele_plot2)
 
-setwd("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/")
-ggsave(ele_plot2,
-       file = "tahoe_swe_12-27_ele_in.png",
-       width = 7, 
-       height = 5,
-       dpi = 400)
-
-data <- wy2021_df %>% # plot mean within imbedded dplyr functions
-  group_by(date) %>%
-  dplyr::summarize(swe_mean_in = mean(swe_in, na.rm=TRUE))
+# setwd("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/")
+# ggsave(ele_plot2,
+#        file = "tahoe_swe_12-27_ele_in.png",
+#        width = 7, 
+#        height = 5,
+#        dpi = 400)
+# 
+# data <- wy2021_df %>% # plot mean within imbedded dplyr functions
+#   group_by(date) %>%
+#   dplyr::summarize(swe_mean_in = mean(swe_in, na.rm=TRUE))
+}
 
 
 
