@@ -1,0 +1,32 @@
+---
+title: "Investigating the Impacts of Christian Ronaldo on his Teammates: An Analysis of the so far Pedestrian 2021-2022 Manchester United Campaign"
+author: "John Michael Tarricone"
+date: "1/19/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1.0 Introduction
+
+Manchester United is a storied football club rich in historical succuess in the Premier League era. It is routinely valued as one the most expensive sports organizations in the world (The New York Times, 2012). Under the management of legendary Sir Alex Fergason from 1986-2012, the club won 13 Priemer League (PL) titles, two UEFA champions (UCL), and were a consistent force on top of world football.
+  
+In the 8 seaons since Sir Alex's depature, the club trajectory has taken a significant downturn. During this period they have gone through seven different managers, are yet to win a PL title, and haven't advanced past the quarter final in UCL. This is not depsite serious investment for ownership - during this period the Glazer family and management organization has spent XXXX, "second" only to it's neighbors Manchester City.
+  
+The club finished second in 2020-2021 PL campaign and hopes were high for 2021-2022 season. These expectations were enhanced with the resigning of club legend Christiano Ronaldo (CR) on August 31, 2021. CR is known at one of the greatest footballers ever, 
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
