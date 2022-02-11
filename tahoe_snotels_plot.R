@@ -67,7 +67,7 @@ wy2021_df <-bind_rows(wy2021)
 head(wy2021_df)
 
 # create plot with grey transarent stations, and max/min/med info to todays date
-theme_set(theme_light(base_size = 11)) 
+theme_set(theme_classic(base_size = 11)) 
 plot <-ggplot(wy2021_df)+
   geom_line(aes(date, swe_in, group = site_name, color = "2021-22 SNOTEL Stations"), alpha = .7,  size = .3)+ # plot by site
   labs(title =  paste0(todays_date," Lake Tahoe SNOTEL 32 Station Composite"), 
@@ -142,10 +142,12 @@ plot(fy_plot)
 ##################################################################
 ######### create plot with mean and stations by elevation #######
 #################################################################
+?hcl.colors
+RColorBrewer::display.brewer.all()
 
 ele_plot <-ggplot(wy2021_df)+
   geom_line(aes(date, swe_in, group = site_name, color = elev), alpha = .7)+ # plot by site
-  scale_colour_gradientn(colors = terrain.colors(15))+
+  scale_colour_gradientn(colors = brewer.pal(9,"RdYlBu"))+
   labs(title = paste0(todays_date," Lake Tahoe SNOTEL 32 Station Composite by Elevation"), 
        y = "SWE (in)", x = "Date", color = "Station Elevation (m)") +
   theme(axis.line = element_line(colour = "black"),
@@ -164,7 +166,7 @@ ele_plot2 <-ele_plot +
               group_by(date) %>%
               dplyr::summarize(swe_mean_in = mean(swe_in, na.rm=TRUE)), 
             mapping = aes(y = swe_mean_in, x = date, color = "WY2021 Mean"), size = .9)+
-  scale_colour_manual("", values = c("black"))
+  scale_colour_manual("", values = c("black")) 
 
 print(ele_plot2)
 
@@ -181,8 +183,76 @@ print(ele_plot2)
 }
 
 
+ele_plot <-ggplot(wy2021_df)+
+  geom_line(aes(date, swe_in, group = site_name, color = elev), alpha = .7)+ # plot by site
+  scale_colour_gradientn(colors = brewer.pal(9,"RdYlBu"))+
+  labs(title = paste0(todays_date," Lake Tahoe SNOTEL 32 Station Composite by Elevation"), 
+       y = "SWE (in)", x = "Date", color = "Station Elevation (m)") +
+  theme(axis.line = element_line(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        legend.position = c(.2,.7),
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 9, face = "bold"),
+        legend.margin = margin(t=0, unit='cm'),
+        legend.key = element_rect(size = .2))
+ele_plot2 <-ele_plot + 
+  ggnewscale::new_scale_colour() + 
+  geom_line(data = wy2021_df %>% # plot mean within imbedded dplyr functions
+              group_by(date) %>%
+              dplyr::summarize(swe_mean_in = mean(swe_in, na.rm=TRUE)), 
+            mapping = aes(y = swe_mean_in, x = date, color = "WY2021 Mean"), size = .9)+
+  scale_colour_manual("", values = c("black")) 
+
+print(ele_plot2)
 
 
+############################
+#### plot since dec storm ##
 
+# filter to just from dec 26 to doay
+dec_storm_2021 <-df_list
+
+# loop to filter each df to start at 10/1/2021
+for (i in seq_along(df_list)){
+  single_df <-df_list[[i]] # pull out df from list
+  single_df$date <-ymd(single_df$date) # convert data to R date
+  
+  # filter to start at 10/1/2021 or beginging of water year 2021
+  dec_storm_2021[[i]] <-filter(single_df, date >= "2021-12-25")
+
+# convert list to df, yup
+dec_storm_2021_df <-bind_rows(dec_storm_2021) 
+head(dec_storm_2021_df)
+
+
+dry_plot <-ggplot(dec_storm_2021_df)+
+  geom_line(aes(date, swe_in, group = site_name, color = elev), alpha = 1)+ # plot by site
+  #scale_colour_gradientn(colors = brewer.pal(9,"RdYlBu"))+
+  viridis::scale_color_viridis(option = "cividis") +
+  labs(title = paste0("32 Tahoe SNOTELs since Dec. storm ",todays_date), 
+       y = "SWE (in)", x = "Date", color = "Station Elevation (m)") 
+  # theme(axis.line = element_line(colour = "black"),
+  #       panel.grid.major = element_blank(),
+  #       panel.grid.minor = element_blank(),
+  #       panel.border = element_blank(),
+  #       panel.background = element_blank(),
+  #       legend.position = c(.2,.7),
+  #       legend.text = element_text(size = 8),
+  #       legend.title = element_text(size = 9, face = "bold"),
+  #       legend.margin = margin(t=0, unit='cm'),
+  #       legend.key = element_rect(size = .2))
+dry_plot2 <-dry_plot + 
+  ggnewscale::new_scale_colour() + 
+  geom_line(data = dec_storm_2021_df %>% # plot mean within imbedded dplyr functions
+              group_by(date) %>%
+              dplyr::summarize(swe_mean_in = mean(swe_in, na.rm=TRUE)), 
+            mapping = aes(y = swe_mean_in, x = date, color = "WY2021 Mean"), size = 1.3)+
+  scale_colour_manual("", values = c("red")) 
+
+print(dry_plot2)
+}
   
  
