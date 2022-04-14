@@ -178,7 +178,7 @@ print(ele_plot2)
 # data <- wy2021_df %>% # plot mean within imbedded dplyr functions
 #   group_by(date) %>%
 #   dplyr::summarize(swe_mean_in = mean(swe_in, na.rm=TRUE))
-}
+
 
 
 ele_plot <-ggplot(wy2021_df)+
