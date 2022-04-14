@@ -10,7 +10,7 @@ library(ggplot2)
 library(lubridate)
 library(RColorBrewer)
 
-{
+
 # read in station meta data from Truckee, Carson, Lower Sac (32 stations)
 tahoe_meta <-read.csv("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/tahoe_station_meta.csv")
 tahoe_meta <-tahoe_meta[-c(2,18)]
@@ -22,7 +22,7 @@ tahoe_meta$end_date <-mdy(tahoe_meta$end_date)
 # format normals data
 truckee_normals <-read.csv("/Users/jacktarricone/Desktop/twitter/tahoe_snotels/truckee_91-20_normals.csv")
 truckee_normals$Date <-as.Date(truckee_normals$Date)
-plot(truckee_normals$dowy, truckee_normals$min_mm) # test
+
 
 # define date
 todays_date <-as.character(Sys.Date())
@@ -31,7 +31,7 @@ todays_date <-as.character(Sys.Date())
 normals_today <-filter(truckee_normals, Date <= Sys.Date())
 
 # create list to loop the dataframes into
-df_list <-as.list(rep(NA, 32))
+df_list <-as.list(rep(NA, nrow(tahoe_meta)))
 
 # read in SNOTEL CSVs using ID number and name from meta data
 for (i in seq_along(tahoe_meta$name)){
@@ -141,9 +141,7 @@ plot(fy_plot)
 
 ##################################################################
 ######### create plot with mean and stations by elevation #######
-#################################################################
-?hcl.colors
-RColorBrewer::display.brewer.all()
+
 
 ele_plot <-ggplot(wy2021_df)+
   geom_line(aes(date, swe_in, group = site_name, color = elev), alpha = .7)+ # plot by site
