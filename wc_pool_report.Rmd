@@ -1,0 +1,19 @@
+---
+title: "Le Chateau Wolrd Cup Pool Standings Report and Data Analyzation"
+output: pdf_document
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(googlesheets4)
+people <-as.data.frame(read_sheet("https://docs.google.com/spreadsheets/d/1Q7omui-K_MWgUX9y-DeCyhID_M9o0TiIk3szJs-pxdk/edit#gid=0"), row.names = FALSE)
+```
+
+## Participants
+
+```{r, echo=FALSE}
+print(people, row.names = FALSE)
+
+```
+
