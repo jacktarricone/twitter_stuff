@@ -92,10 +92,10 @@ ggplot(forwards) +
        x = "Shots per goal",
        y = "Count")
 
-ggsave(file = "forwards_shots_per_goal_2020.png",
-       width = 6,
-       height = 4,
-       dpi = 400)
+# ggsave(file = "forwards_shots_per_goal_2020.png",
+#        width = 6,
+#        height = 4,
+#        dpi = 400)
 
 # above 0 gp90
 forwards_0 <-filter(forwards, goals_per_90min > 0)
@@ -110,10 +110,10 @@ ggplot(forwards_0) +
        x = "Goals per 90 mintues",
        y = "Count")
 
-ggsave(file = "forwards_goals_per_90_2020.png",
-       width = 6,
-       height = 4,
-       dpi = 400)
+# ggsave(file = "forwards_goals_per_90_2020.png",
+#        width = 6,
+#        height = 4,
+#        dpi = 400)
 
 # relocate cols
 forwards <-forwards %>% relocate(shots_per_90min)
@@ -126,18 +126,13 @@ max_gp90 <-forwards %>%
   group_by(team) %>%
   filter(goals_per_90min == max(goals_per_90min))
 
-# min
-# min_spg <-forwards %>% 
-#   group_by(team) %>%
-#   filter(shots_per_goal == min(shots_per_goal))
-
 # round
 max_gp90$goals_per_90min <-round(max_gp90$goals_per_90min, digits = 2)
 max_gp90$shots_per_90min <-round(max_gp90$shots_per_90min, digits = 2)
 max_gp90$shots_per_goal <-round(max_gp90$shots_per_goal, digits = 2)
 
-#
-print(max_gp90)
-
-write.csv(max_gp90, "max_gp90_per_team.csv") 
+# mean shots per goal
 mean(max_gp90$shots_per_goal)
+
+# write csv
+write.csv(max_gp90, "max_gp90_per_team.csv") 
