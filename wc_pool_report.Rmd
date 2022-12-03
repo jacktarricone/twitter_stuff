@@ -3,17 +3,28 @@ title: "Le Chateau Wolrd Cup Pool Standings Report and Data Analyzation"
 output: pdf_document
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
-
+## Group Stage Standings
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(googlesheets4)
-people <-as.data.frame(read_sheet("https://docs.google.com/spreadsheets/d/1Q7omui-K_MWgUX9y-DeCyhID_M9o0TiIk3szJs-pxdk/edit#gid=0"), row.names = FALSE)
 ```
 
-## Participants
-
-```{r, echo=FALSE}
-print(people, row.names = FALSE)
-
+```{r, echo = FALSE}
+standings_raw <-read.csv("/Users/jacktarricone/Desktop/twitter/group_stage_points.csv")
+standings_ordered <-standings_raw[order(standings_raw$points, decreasing = TRUE),]
+print(standings_ordered)
 ```
+
+```{r, echo = FALSE}
+mean <-signif(mean(standings_ordered$points), digits = 3)
+median <-median(standings_ordered$points)
+range <-24-13
+min <-min(standings_ordered$points)
+max <-max(standings_ordered$points)
+
+Stat <-c("Mean","Median","Range","Min","Max")
+Value <-c(mean,median,range,min,max)
+stats <-as.data.frame(cbind(Stat,Value))
+print(stats, row.names = FALSE)
+```
+
 
