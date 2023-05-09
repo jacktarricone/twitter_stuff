@@ -1,5 +1,5 @@
 ---
-title: "Le Chateau Wolrd Cup Pool Standings Report and Data Analyzation"
+title: "Le Chateau World Cup Pool Standings Report"
 output: 
   pdf_document:
     latex_engine: xelatex
@@ -34,6 +34,8 @@ pr_v2 <-colnames(points_raw) # extract col names
 pr_v3 <-substr(pr_v2,1,nchar(pr_v2)-4) # remove name change 
 pr_v4 <-pr_v3[-1]
 knockout_points <-as.numeric(pr_v4)
+knockout_points[15] <-as.integer(9) ####### fix
+knockout_points[24] <-as.integer(4) ####### fix
 
 # make table
 standings <-as.data.frame(cbind(names,group_points$V1,knockout_points))
@@ -55,9 +57,10 @@ ordered <-standings[order(-standings$Total),]
 ```
 
 # Standings
-Last Game: England vs. Senegal
+Last Game: Argentina vs. Netherlands
 ```{r, echo=FALSE}
-print(ordered)
+with_rank <-ordered %>% mutate(Rank = min_rank(-Total)) %>% ungroup()
+print(with_rank, row.names = FALSE)
 ```
 
 
